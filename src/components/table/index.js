@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import http from 'src/utils/http'
+import { httpConsole } from 'auto-libs'
 import { Table, message } from 'antd'
 import qs from 'qs'
 import ignore from 'src/utils/ignoreProps'
@@ -142,7 +142,7 @@ class ATTable extends React.Component {
       }
 
       // 请求数据
-      let result = await http.request(request)
+      let result = await httpConsole.request(request)
 
       // 如果请求到数据是个妈逼的null，但那帮傻缺又返回接口调用成功时
       if (!result || !result[this.listName] || !result[this.listName].length) {
@@ -224,9 +224,10 @@ class ATTable extends React.Component {
         dataIndex: customData[1],
         align: 'center',
         render: (text, record, index) => {
-          if (render) return render(text, record, index)
+          const textData = text !== void 0 && text !== null ? text : '-'
+          if (render) return render(textData, record, index)
           if (renderConsole) return renderConsole(record, index)
-          return text
+          return textData
         },
         ...otherData,
       }
